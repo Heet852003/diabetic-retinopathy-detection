@@ -37,8 +37,8 @@ if uploaded_file is not None:
     img_array = np.array(img) / 255.0  # Normalize pixel values
     img_array = img_array.reshape(1, -1)  # Reshape for model input
 
-    # Display the uploaded image
-    st.image(img, caption='Uploaded Image', use_column_width=True)
+    # Display the uploaded image with reduced size
+    st.image(img, caption='Uploaded Image', use_column_width=True, width=300)
 
     # Button for prediction
     if st.button('Predict'):
