@@ -36,13 +36,13 @@ st.markdown("""
     <h3>Contact Me</h3>
     <p>
         <a href="https://github.com/Heet852003" target="_blank">
-            <img src="https://image.flaticon.com/icons/svg/25/25231.svg" width="30" height="30">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" width="30" height="30">
         </a>
         <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank">
-            <img src="https://image.flaticon.com/icons/svg/174/174857.svg" width="30" height="30">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" width="30" height="30">
         </a>
         <a href="mailto:mehtaheet5@gmail.com">
-            <img src="https://image.flaticon.com/icons/svg/732/732200.svg" width="30" height="30">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/envelope.png" width="30" height="30">
         </a>
     </p>
     <style>
@@ -63,3 +63,4 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+
