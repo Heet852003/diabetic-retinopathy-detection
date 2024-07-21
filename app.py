@@ -14,9 +14,9 @@ st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im)
 # Display the logo before the title
 st.markdown("""
     <div style='text-align: center;'>
-        <img src='data:image/png;base64,{}' width='100' height='100'/>
+        <img src='data:image/png;base64,{}' width='30' height='30'/>
     </div>
-""".format(st.image(im)), unsafe_allow_html=True)
+""")
 
 st.title('Diabetic Retinopathy Detection')
 
