@@ -9,6 +9,8 @@ with open('diabetic_retinopathy_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 # Streamlit app title
+im = Image.open('logo.png')
+st.set_page_config(page_title="Surge Price Prediction App", page_icon = im)
 st.title('Diabetic Retinopathy Detection')
 
 # File uploader for image input
