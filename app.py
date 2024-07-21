@@ -10,6 +10,14 @@ with open('diabetic_retinopathy_model.pkl', 'rb') as f:
 # Streamlit app title
 im = Image.open('logo.png')
 st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im)
+
+# Display the logo before the title
+st.markdown("""
+    <div style='text-align: center;'>
+        <img src='data:image/png;base64,{}' width='100' height='100'/>
+    </div>
+""".format(st.image(im)), unsafe_allow_html=True)
+
 st.title('Diabetic Retinopathy Detection')
 
 # File uploader for image input
@@ -63,4 +71,3 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
-
