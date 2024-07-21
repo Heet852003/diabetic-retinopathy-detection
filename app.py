@@ -37,8 +37,12 @@ if uploaded_file is not None:
     img_array = np.array(img) / 255.0  # Normalize pixel values
     img_array = img_array.reshape(1, -1)  # Reshape for model input
 
-    # Display the uploaded image with reduced size
-    st.image(img, caption='Uploaded Image', use_column_width=True, width=300)
+    # Display the uploaded image with reduced size using CSS
+    st.markdown(f"""
+        <div style='text-align: center;'>
+            <img src='data:image/png;base64,{base64.b64encode(uploaded_file.getvalue()).decode()}' width='300' height='300'/>
+        </div>
+    """, unsafe_allow_html=True)
 
     # Button for prediction
     if st.button('Predict'):
