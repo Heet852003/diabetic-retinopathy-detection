@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 from PIL import Image
 import numpy as np
+import base64
 
 # Load the trained model
 with open('diabetic_retinopathy_model.pkl', 'rb') as f:
@@ -11,12 +12,18 @@ with open('diabetic_retinopathy_model.pkl', 'rb') as f:
 im = Image.open('logo.png')
 st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im)
 
+# Function to encode image to base64
+def get_base64_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode()
+
 # Display the logo before the title
-st.markdown("""
+logo_base64 = get_base64_image('logo.png')
+st.markdown(f"""
     <div style='text-align: center;'>
-        <img src='logo.png' width='30' height='30'/>
+        <img src='data:image/png;base64,{logo_base64}' width='100' height='100'/>
     </div>
-""".format(st.image(im)), unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 st.title('Diabetic Retinopathy Detection')
 
