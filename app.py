@@ -2,7 +2,6 @@ import streamlit as st
 import pickle
 from PIL import Image
 import numpy as np
-import os
 
 # Load the trained model
 with open('diabetic_retinopathy_model.pkl', 'rb') as f:
@@ -10,7 +9,7 @@ with open('diabetic_retinopathy_model.pkl', 'rb') as f:
 
 # Streamlit app title
 im = Image.open('logo.png')
-st.set_page_config(page_title="Surge Price Prediction App", page_icon = im)
+st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im)
 st.title('Diabetic Retinopathy Detection')
 
 # File uploader for image input
@@ -30,3 +29,37 @@ if uploaded_file is not None:
     if st.button('Predict'):
         prediction = model.predict(img_array)
         st.write(f'Prediction: {"Diabetic Retinopathy Detected" if prediction[0] != 0 else "No Diabetic Retinopathy"}')
+
+# Contact Me section
+st.markdown("""
+    <hr>
+    <h3>Contact Me</h3>
+    <p>
+        <a href="https://github.com/Heet852003" target="_blank">
+            <img src="https://image.flaticon.com/icons/svg/25/25231.svg" width="30" height="30">
+        </a>
+        <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank">
+            <img src="https://image.flaticon.com/icons/svg/174/174857.svg" width="30" height="30">
+        </a>
+        <a href="mailto:mehtaheet5@gmail.com">
+            <img src="https://image.flaticon.com/icons/svg/732/732200.svg" width="30" height="30">
+        </a>
+    </p>
+    <style>
+        hr {
+            border: 0;
+            height: 1px;
+            background: #333;
+            background-image: linear-gradient(to right, #ccc, #333, #ccc);
+        }
+        h3 {
+            text-align: center;
+        }
+        p {
+            text-align: center;
+        }
+        p img {
+            margin: 0 10px;
+        }
+    </style>
+""", unsafe_allow_html=True)
