@@ -42,7 +42,7 @@ st.markdown("""
             <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" width="30" height="30">
         </a>
         <a href="mailto:mehtaheet5@gmail.com">
-            <img src="https://fontawesome.com/icons/envelope?f=classic&s=regular" width="30" height="30">
+            <link href='https://unpkg.com/css.gg@2.0.0/icons/css/mail.css' rel='stylesheet'>
         </a>
     </p>
     <style>
