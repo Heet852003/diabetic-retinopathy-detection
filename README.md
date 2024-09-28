@@ -109,13 +109,13 @@ Upgrade the web interface with more interactive diagnostic insights and patient 
 ---
 
 
-##🤝 **Contributing**
+## 🤝 **Contributing**
 Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or create a pull request. Let's collaborate to make this project even better!
 
 ---
 
 
-📬 Contact
+## 📬 **Contact**
 For any inquiries or suggestions, please feel free to reach out:
 
 - **Name: Heet Mehta**
