@@ -22,7 +22,7 @@ st.markdown("""
             background-color: #f0f4fa !important;
             text-align: center;
         }
-        
+
         /* Button Styles */
         div.stButton > button {
             background-color: #007bff;
@@ -32,9 +32,32 @@ st.markdown("""
             padding: 10px 20px;
             font-size: 16px;
         }
-        
+
         div.stButton > button:hover {
             background-color: #0056b3;
+        }
+
+        /* Welcome message typing effect */
+        .typing-demo {
+            width: 40ch;  /* Adjusted width for full sentence */
+            animation: typing 3s steps(40), blink 0.5s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid;
+            font-size: 22px;
+            font-weight: bold;
+            color: #003366;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 40ch }
+        }
+        
+        @keyframes blink {
+            50% { border-color: transparent }
         }
 
         /* Central alignment for all content */
@@ -43,6 +66,19 @@ st.markdown("""
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            text-align: center;
+        }
+
+        /* Fix for contact section icons */
+        p img {
+            background-color: #007bff;  /* Blue background for white logos */
+            border-radius: 50%;
+            padding: 5px;
+            margin: 0 10px;
+        }
+
+        /* Central alignment for all headers */
+        h1, h2, h3 {
             text-align: center;
         }
     </style>
