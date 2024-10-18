@@ -12,7 +12,7 @@ with open('diabetic_retinopathy_model.pkl', 'rb') as f:
 im = Image.open('logo.png')
 st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im, layout="wide")
 
-# Custom CSS for lighter theme and sidebar
+# Custom CSS for Navbar and lighter theme
 st.markdown("""
     <style>
         /* Body and font */
@@ -24,7 +24,37 @@ st.markdown("""
             text-align: center;
         }
 
-        /* Lighter color for buttons */
+        /* Navbar styling */
+        .navbar {
+            overflow: hidden;
+            background-color: #4da9ff;
+            padding: 10px 0;
+            border-radius: 10px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #63b3ff;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .navbar a.active {
+            background-color: #0056b3;
+            color: white;
+            border-radius: 5px;
+        }
+
+        /* Lighter button color */
         div.stButton > button {
             background-color: #4da9ff;
             color: white;
@@ -59,34 +89,6 @@ st.markdown("""
         
         @keyframes blink {
             50% { border-color: transparent }
-        }
-
-        /* Centering content */
-        .centered {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-        }
-
-        /* Sidebar styling */
-        .css-1d391kg {
-            background-color: #eaf4ff !important;
-            border-right: 1px solid #c6e2ff !important;
-        }
-
-        /* Styling the sidebar options */
-        .css-1vbd788 {
-            font-weight: bold;
-            color: #0056b3 !important;
-            padding: 10px;
-        }
-
-        .css-1vbd788:hover {
-            background-color: #cceeff !important;
-            border-radius: 5px;
-            transition: background-color 0.3s ease-in-out;
         }
 
         /* Floating Shapes */
@@ -124,6 +126,16 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Navigation bar
+st.markdown("""
+    <div class="navbar">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#upload-image">Upload Image</a>
+        <a href="#contact">Contact</a>
+    </div>
+""", unsafe_allow_html=True)
+
 # Inject moving shapes
 st.markdown("""
     <div class="floating-shape floating-shape-1"></div>
@@ -136,82 +148,78 @@ st.markdown("""
 # Display the logo using Streamlit's st.image method
 st.image('logo.png', width=120)
 
-# Sidebar Navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "About", "Upload Image", "Contact"])
-
-# Welcome message with typing effect
-if page == "Home":
-    st.markdown("""
-        <div class="typing-demo">
-            Welcome to Diabetic Retinopathy Detection
-        </div>
-    """, unsafe_allow_html=True)
+# Home Section
+st.markdown("<div id='home'></div>", unsafe_allow_html=True)
+st.markdown("""
+    <div class="typing-demo">
+        Welcome to Diabetic Retinopathy Detection
+    </div>
+""", unsafe_allow_html=True)
 
 # About section
-if page == "About":
-    st.title("About This Application")
-    st.write("""
-        This application is designed to assist in the detection of Diabetic Retinopathy from retinal images. 
-        Using machine learning, the system analyzes uploaded images and predicts whether diabetic retinopathy is present. 
-        Diabetic retinopathy is a serious condition caused by damage to the blood vessels in the retina due to high blood sugar levels, which can lead to vision loss if left untreated.
-    """)
+st.markdown("<div id='about'></div>", unsafe_allow_html=True)
+st.title("About This Application")
+st.write("""
+    This application is designed to assist in the detection of Diabetic Retinopathy from retinal images. 
+    Using machine learning, the system analyzes uploaded images and predicts whether diabetic retinopathy is present. 
+    Diabetic retinopathy is a serious condition caused by damage to the blood vessels in the retina due to high blood sugar levels, which can lead to vision loss if left untreated.
+""")
 
 # Upload Image Section
-if page == "Upload Image":
-    st.title("Diabetic Retinopathy Detection")
-    
-    # Image input section
-    st.subheader("Upload Retinal Image:")
-    uploaded_file = st.file_uploader("Choose a retinal image...", type=["jpg", "png"])
+st.markdown("<div id='upload-image'></div>", unsafe_allow_html=True)
+st.title("Diabetic Retinopathy Detection")
 
-    if uploaded_file is not None:
-        img = Image.open(uploaded_file)
-        img = img.resize((224, 224))  # Resize to match model input
-        img_array = np.array(img) / 255.0  # Normalize pixel values
-        img_array = img_array.reshape(1, -1)  # Reshape for model input
+# Image input section
+st.subheader("Upload Retinal Image:")
+uploaded_file = st.file_uploader("Choose a retinal image...", type=["jpg", "png"])
 
-        # Side-by-side layout for image and prediction
-        col1, col2 = st.columns([1, 1])
+if uploaded_file is not None:
+    img = Image.open(uploaded_file)
+    img = img.resize((224, 224))  # Resize to match model input
+    img_array = np.array(img) / 255.0  # Normalize pixel values
+    img_array = img_array.reshape(1, -1)  # Reshape for model input
 
-        with col1:
-            # Display the uploaded image
-            st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+    # Side-by-side layout for image and prediction
+    col1, col2 = st.columns([1, 1])
 
-        with col2:
-            # Predict button
-            if st.button('Predict'):
-                prediction = model.predict(img_array)
-                st.write(f'**Prediction:** {"Diabetic Retinopathy Detected" if prediction[0] != 0 else "No Diabetic Retinopathy"}')
-                
-                # Display advice based on prediction
-                if prediction[0] != 0:
-                    st.write("""
-                        ### Medical Advice:
-                        - Consult an ophthalmologist immediately.
-                        - Control your blood sugar levels to prevent further damage.
-                        - Regular eye exams are recommended for early detection and treatment.
-                    """)
-                else:
-                    st.write("""
-                        ### Medical Advice:
-                        - Your retinal image shows no signs of diabetic retinopathy.
-                        - Maintain a healthy lifestyle and have regular eye check-ups.
-                    """)
+    with col1:
+        # Display the uploaded image
+        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+
+    with col2:
+        # Predict button
+        if st.button('Predict'):
+            prediction = model.predict(img_array)
+            st.write(f'**Prediction:** {"Diabetic Retinopathy Detected" if prediction[0] != 0 else "No Diabetic Retinopathy"}')
+            
+            # Display advice based on prediction
+            if prediction[0] != 0:
+                st.write("""
+                    ### Medical Advice:
+                    - Consult an ophthalmologist immediately.
+                    - Control your blood sugar levels to prevent further damage.
+                    - Regular eye exams are recommended for early detection and treatment.
+                """)
+            else:
+                st.write("""
+                    ### Medical Advice:
+                    - Your retinal image shows no signs of diabetic retinopathy.
+                    - Maintain a healthy lifestyle and have regular eye check-ups.
+                """)
 
 # Contact section
-if page == "Contact":
-    st.title("Contact Me")
-    st.markdown("""
-        <p>
-            <a href="https://github.com/Heet852003" target="_blank">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" width="30" height="30">
-            </a>
-            <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" width="30" height="30">
-            </a>
-            <a href="mailto:mehtaheet5@gmail.com">
-                <img src="https://img.icons8.com/?size=100&id=12623&format=png&color=FFFFFF" width="30" height="30">
-            </a>
-        </p>
-    """, unsafe_allow_html=True)
+st.markdown("<div id='contact'></div>", unsafe_allow_html=True)
+st.title("Contact Me")
+st.markdown("""
+    <p>
+        <a href="https://github.com/Heet852003" target="_blank">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" width="30" height="30">
+        </a>
+        <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" width="30" height="30">
+        </a>
+        <a href="mailto:mehtaheet5@gmail.com">
+            <img src="https://img.icons8.com/?size=100&id=12623&format=png&color=FFFFFF" width="30" height="30">
+        </a>
+    </p>
+""", unsafe_allow_html=True)
