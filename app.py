@@ -12,20 +12,21 @@ with open('diabetic_retinopathy_model.pkl', 'rb') as f:
 im = Image.open('logo.png')
 st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im, layout="wide")
 
-# Custom CSS for styling
+# Custom CSS for lighter theme and sidebar
 st.markdown("""
     <style>
         /* Body and font */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f0f4fa !important;
+            background-color: #f7f9fc !important;
+            color: #333;
             text-align: center;
         }
 
-        /* Button Styles */
+        /* Lighter color for buttons */
         div.stButton > button {
-            background-color: #007bff;
+            background-color: #4da9ff;
             color: white;
             border: none;
             border-radius: 10px;
@@ -34,19 +35,19 @@ st.markdown("""
         }
 
         div.stButton > button:hover {
-            background-color: #0056b3;
+            background-color: #63b3ff;
         }
 
         /* Welcome message typing effect */
         .typing-demo {
-            width: 40ch;  /* Adjusted width for full sentence */
+            width: 40ch;
             animation: typing 3s steps(40), blink 0.5s step-end infinite alternate;
             white-space: nowrap;
             overflow: hidden;
             border-right: 3px solid;
             font-size: 22px;
             font-weight: bold;
-            color: #003366;
+            color: #0056b3;
             text-align: center;
             margin-top: 20px;
         }
@@ -60,7 +61,7 @@ st.markdown("""
             50% { border-color: transparent }
         }
 
-        /* Central alignment for all content */
+        /* Centering content */
         .centered {
             display: flex;
             justify-content: center;
@@ -69,34 +70,26 @@ st.markdown("""
             text-align: center;
         }
 
-        /* Fix for contact section icons */
-        p img {
-            background-color: #007bff;  /* Blue background for white logos */
-            border-radius: 50%;
-            padding: 5px;
-            margin: 0 10px;
-        }
-
         /* Sidebar styling */
         .css-1d391kg {
-            background-color: #007bff;
-            color: white;
-            border-radius: 10px;
-            padding: 15px;
+            background-color: #eaf4ff !important;
+            border-right: 1px solid #c6e2ff !important;
         }
 
-        .css-1d391kg .css-1vbd788 {
+        /* Styling the sidebar options */
+        .css-1vbd788 {
             font-weight: bold;
-            font-size: 18px;
-            text-transform: uppercase;
+            color: #0056b3 !important;
+            padding: 10px;
         }
 
         .css-1vbd788:hover {
-            background-color: #0056b3;
-            transition: 0.3s;
+            background-color: #cceeff !important;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
         }
 
-        /* Moving Shapes */
+        /* Floating Shapes */
         @keyframes float {
             0% { transform: translate(0, 0); }
             50% { transform: translate(20px, -30px); }
@@ -107,7 +100,7 @@ st.markdown("""
             position: absolute;
             width: 80px;
             height: 80px;
-            background-color: rgba(0, 123, 255, 0.3);
+            background-color: rgba(77, 169, 255, 0.3);
             border-radius: 50%;
             animation: float 10s infinite ease-in-out;
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -119,6 +112,14 @@ st.markdown("""
         .floating-shape-3 { bottom: 150px; left: 30px; animation-duration: 10s; animation-delay: 2s; }
         .floating-shape-4 { top: 300px; right: 200px; animation-duration: 15s; animation-delay: 1.5s; }
         .floating-shape-5 { bottom: 50px; right: 80px; animation-duration: 20s; animation-delay: 0.5s; }
+
+        /* Fix for contact section icons */
+        p img {
+            background-color: #4da9ff;
+            border-radius: 50%;
+            padding: 5px;
+            margin: 0 10px;
+        }
 
     </style>
 """, unsafe_allow_html=True)
