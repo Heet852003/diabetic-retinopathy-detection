@@ -15,19 +15,20 @@ st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im, la
 # Define a function to manage which section is active
 def nav_item(label, active=False):
     if active:
-        return f'<a href="#{label.lower()}" class="active">{label}</a>'
+        return f'<a href="?page={label.lower()}" class="active">{label}</a>'
     else:
-        return f'<a href="#{label.lower()}">{label}</a>'
+        return f'<a href="?page={label.lower()}">{label}</a>'
 
-# Get the current page from session state or default to "Home"
+# Set default to 'Home' page if no query parameter is found
 if 'page' not in st.session_state:
     st.session_state.page = 'Home'
 
-# Sidebar logic to switch between pages
-section = st.sidebar.radio("Navigation", ["Home", "About", "Upload Image", "Contact"])
-
-# Update the current page in session state based on section clicked
-st.session_state.page = section
+# Check the page query parameter
+query_params = st.experimental_get_query_params()
+if "page" in query_params:
+    st.session_state.page = query_params["page"][0].capitalize()
+else:
+    st.session_state.page = "Home"
 
 # Custom CSS for Navbar and lighter theme
 st.markdown(f"""
