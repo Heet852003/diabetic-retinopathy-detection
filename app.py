@@ -20,9 +20,11 @@ st.set_page_config(page_title="Diabetic Retinopathy Detection", page_icon=im, la
 # Custom CSS for styling
 st.markdown("""
     <style>
-        /* Background Color */
+        /* Body and font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         body {
-            background-color: #f0f4fa;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4fa !important;
         }
         
         /* Button Styles */
@@ -39,58 +41,83 @@ st.markdown("""
             background-color: #0056b3;
         }
         
-        /* Center logo and title */
+        /* Welcome message typing effect */
+        .typing-demo {
+            width: 22ch;
+            animation: typing 2s steps(22), blink 0.5s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid;
+            font-size: 22px;
+            font-weight: bold;
+            color: #003366;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 22ch }
+        }
+        
+        @keyframes blink {
+            50% { border-color: transparent }
+        }
+
+        /* Moving Shapes */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0px) rotate(360deg); }
+        }
+        
+        .floating-shape {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 123, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-shape-1 {
+            top: 100px;
+            left: 50px;
+        }
+
+        .floating-shape-2 {
+            top: 200px;
+            right: 100px;
+        }
+        
+        /* Contact section logo visibility fix */
+        p img {
+            background-color: #007bff;
+            border-radius: 50%;
+            padding: 5px;
+            margin: 0 10px;
+        }
+        
         h1 {
             text-align: center;
             color: #003366;
         }
-        
-        /* Image uploader styling */
-        .stFileUploader label {
-            color: #007bff;
-        }
 
-        /* Contact section styling */
-        hr {
-            border: 0;
-            height: 1px;
-            background: #333;
-            background-image: linear-gradient(to right, #ccc, #333, #ccc);
-        }
-        h3 {
-            text-align: center;
-            color: #003366;
-        }
-        p {
-            text-align: center;
-        }
-        p img {
-            margin: 0 10px;
-        }
-
-        /* Animated shapes */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .floating-shape {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: #007bff;
-            border-radius: 50%;
-            animation: float 4s ease-in-out infinite;
-            opacity: 0.6;
-        }
     </style>
 """, unsafe_allow_html=True)
 
-# Inject animated shapes
+# Inject moving shapes
 st.markdown("""
-    <div class="floating-shape" style="top: 20px; left: 80px;"></div>
-    <div class="floating-shape" style="top: 150px; right: 50px;"></div>
+    <div class="floating-shape floating-shape-1"></div>
+    <div class="floating-shape floating-shape-2"></div>
+""", unsafe_allow_html=True)
+
+# Typing welcome message
+st.markdown("""
+    <div class="typing-demo">
+        Welcome to Diabetic Retinopathy Detection
+    </div>
 """, unsafe_allow_html=True)
 
 # Display logo at the top
