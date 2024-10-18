@@ -1,155 +1,144 @@
-import { useState } from 'react'
-import { Upload, AlertCircle, Github, Linkedin, Mail } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import streamlit as st
+import pickle
+from PIL import Image
+import numpy as np
+import base64
 
-export default function DiabetesRetinopathyDetection() {
-  const [file, setFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [prediction, setPrediction] = useState<string | null>(null)
-  const [suggestions, setSuggestions] = useState<string | null>(null)
-  const [remedy, setRemedy] = useState<string | null>(null)
+# Load the trained model
+with open('diabetic_retinopathy_model.pkl', 'rb') as f:
+    model = pickle.load(f)
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setFile(file)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+# Function to encode image to base64
+def get_base64_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode()
+
+# Custom CSS for styling
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+    
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
     }
-  }
-
-  const handlePredict = async () => {
-    // This is where you'd typically make an API call to your backend
-    // For demonstration, we'll use mock data
-    const mockPrediction = Math.floor(Math.random() * 5)
-    const results = getPredictionResults(mockPrediction)
-    setPrediction(results.message)
-    setSuggestions(results.suggestions)
-    setRemedy(results.remedy)
-  }
-
-  const getPredictionResults = (prediction: number) => {
-    switch(prediction) {
-      case 0:
-        return {
-          message: "No Diabetic Retinopathy detected.",
-          suggestions: "Maintain regular eye check-ups.",
-          remedy: ""
-        }
-      case 1:
-        return {
-          message: "Mild Diabetic Retinopathy detected.",
-          suggestions: "Consider lifestyle changes such as diet and exercise.",
-          remedy: "Consult an ophthalmologist for further evaluation."
-        }
-      case 2:
-        return {
-          message: "Moderate Diabetic Retinopathy detected.",
-          suggestions: "Regular monitoring is essential.",
-          remedy: "Discuss treatment options with your healthcare provider."
-        }
-      case 3:
-        return {
-          message: "Severe Diabetic Retinopathy detected.",
-          suggestions: "Immediate medical attention is required.",
-          remedy: "Follow up with a specialist urgently."
-        }
-      case 4:
-        return {
-          message: "Proliferative Diabetic Retinopathy detected.",
-          suggestions: "Urgent intervention is necessary.",
-          remedy: "Seek treatment from a retinal specialist immediately."
-        }
-      default:
-        return {
-          message: "Unable to determine.",
-          suggestions: "Please consult with a healthcare professional.",
-          remedy: ""
-        }
+    .stApp {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-  }
+    h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .upload-container {
+        border: 2px dashed #bdc3c7;
+        border-radius: 5px;
+        padding: 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .stButton > button {
+        background-color: #3498db;
+        color: white;
+        font-weight: bold;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .stButton > button:hover {
+        background-color: #2980b9;
+    }
+    .result {
+        background-color: #ecf0f1;
+        border-radius: 5px;
+        padding: 1rem;
+        margin-top: 2rem;
+    }
+    .result h3 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    .contact-section {
+        text-align: center;
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid #bdc3c7;
+    }
+    .contact-section a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #3498db;
+    }
+    .contact-section a:hover {
+        color: #2980b9;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-  return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto">
-        <div className="text-center mb-8">
-          <img src="/placeholder.svg?height=100&width=100" alt="Logo" className="mx-auto h-24 w-24" />
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Diabetic Retinopathy Detection
-          </h2>
-        </div>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Upload Retinal Image</CardTitle>
-            <CardDescription>Choose a retinal image for analysis</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center w-full">
-              <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-10 h-10 mb-3 text-gray-400" />
-                  <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                  <p className="text-xs text-gray-500">PNG or JPG (MAX. 800x400px)</p>
-                </div>
-                <input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
-              </label>
-            </div>
-            {imagePreview && (
-              <div className="mt-4">
-                <img src={imagePreview} alt="Preview" className="max-w-full h-auto rounded-lg" />
-              </div>
-            )}
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full" onClick={handlePredict} disabled={!file}>
-              Predict
-            </Button>
-          </CardFooter>
-        </Card>
-
-        {prediction && (
-          <Alert className="mt-8">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Prediction Result</AlertTitle>
-            <AlertDescription>
-              {prediction}
-              {suggestions && (
-                <>
-                  <h4 className="font-semibold mt-2">Suggestions:</h4>
-                  <p>{suggestions}</p>
-                </>
-              )}
-              {remedy && (
-                <>
-                  <h4 className="font-semibold mt-2">Remedies:</h4>
-                  <p>{remedy}</p>
-                </>
-              )}
-            </AlertDescription>
-          </Alert>
-        )}
-
-        <footer className="mt-8 text-center">
-          <h3 className="text-lg font-semibold mb-2">Contact Me</h3>
-          <div className="flex justify-center space-x-4">
-            <a href="https://github.com/Heet852003" target="_blank" rel="noopener noreferrer">
-              <Github className="h-6 w-6" />
-            </a>
-            <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank" rel="noopener noreferrer">
-              <Linkedin className="h-6 w-6" />
-            </a>
-            <a href="mailto:mehtaheet5@gmail.com">
-              <Mail className="h-6 w-6" />
-            </a>
-          </div>
-        </footer>
-      </div>
+# App title and logo
+logo_base64 = get_base64_image('logo.png')
+st.markdown(f"""
+    <div style='text-align: center;'>
+        <img src='data:image/png;base64,{logo_base64}' width='100' height='100'/>
+        <h1>Diabetic Retinopathy Detection</h1>
     </div>
-  )
-}
+""", unsafe_allow_html=True)
+
+# File uploader with custom styling
+st.markdown("<div class='upload-container'>", unsafe_allow_html=True)
+uploaded_file = st.file_uploader("Choose a retinal image...", type=["jpg", "png"])
+st.markdown("</div>", unsafe_allow_html=True)
+
+if uploaded_file is not None:
+    # Load and preprocess the image
+    img = Image.open(uploaded_file)
+    img = img.resize((224, 224))  # Resize to match model input
+    img_array = np.array(img) / 255.0  # Normalize pixel values
+    img_array = img_array.reshape(1, -1)  # Reshape for model input
+
+    # Display the uploaded image
+    st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
+
+    # Button for prediction
+    if st.button('Predict'):
+        prediction = model.predict(img_array)[0]
+
+        # Mapping predictions to stages and messages
+        results = {
+            0: ("No Diabetic Retinopathy detected.", "Maintain regular eye check-ups.", ""),
+            1: ("Mild Diabetic Retinopathy detected.", "Consider lifestyle changes such as diet and exercise.", "Consult an ophthalmologist for further evaluation."),
+            2: ("Moderate Diabetic Retinopathy detected.", "Regular monitoring is essential.", "Discuss treatment options with your healthcare provider."),
+            3: ("Severe Diabetic Retinopathy detected.", "Immediate medical attention is required.", "Follow up with a specialist urgently."),
+            4: ("Proliferative Diabetic Retinopathy detected.", "Urgent intervention is necessary.", "Seek treatment from a retinal specialist immediately.")
+        }
+
+        result_message, suggestions, remedy = results.get(prediction, ("Unable to determine.", "Please consult with a healthcare professional.", ""))
+
+        # Display results in a styled container
+        st.markdown('<div class="result">', unsafe_allow_html=True)
+        st.success(result_message)
+        st.markdown(f"### Suggestions:\n{suggestions}")
+        if remedy:
+            st.markdown(f"### Remedies:\n{remedy}")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# Contact Me section
+st.markdown("""
+    <div class="contact-section">
+        <h3>Contact Me</h3>
+        <a href="https://github.com/Heet852003" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank">LinkedIn</a>
+        <a href="mailto:mehtaheet5@gmail.com">Email</a>
+    </div>
+""", unsafe_allow_html=True)
