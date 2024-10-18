@@ -3,16 +3,10 @@ import pickle
 from PIL import Image
 import numpy as np
 import base64
-import random
 
 # Load the trained model
 with open('diabetic_retinopathy_model.pkl', 'rb') as f:
     model = pickle.load(f)
-
-# Function to encode image to base64
-def get_base64_image(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode()
 
 # Set page configuration with custom favicon and layout
 im = Image.open('logo.png')
@@ -42,55 +36,8 @@ st.markdown("""
         div.stButton > button:hover {
             background-color: #0056b3;
         }
-        
-        /* Welcome message typing effect */
-        .typing-demo {
-            width: 40ch;  /* Adjusted width for full sentence */
-            animation: typing 3s steps(40), blink 0.5s step-end infinite alternate;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 3px solid;
-            font-size: 22px;
-            font-weight: bold;
-            color: #003366;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 40ch }
-        }
-        
-        @keyframes blink {
-            50% { border-color: transparent }
-        }
 
-        /* Moving Shapes */
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            50% { transform(translate(50px, -50px)); }
-            100% { transform: translate(0, 0); }
-        }
-        
-        .floating-shape {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            background-color: rgba(0, 123, 255, 0.3);
-            border-radius: 50%;
-            animation: float 10s infinite ease-in-out;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Random directions for shapes */
-        .floating-shape-1 { top: 100px; left: 50px; animation-duration: 12s; animation-delay: 0s; }
-        .floating-shape-2 { top: 200px; right: 100px; animation-duration: 8s; animation-delay: 1s; }
-        .floating-shape-3 { bottom: 150px; left: 30px; animation-duration: 10s; animation-delay: 2s; }
-        .floating-shape-4 { top: 300px; right: 200px; animation-duration: 15s; animation-delay: 1.5s; }
-        .floating-shape-5 { bottom: 50px; right: 80px; animation-duration: 20s; animation-delay: 0.5s; }
-        
-        /* Central alignment */
+        /* Central alignment for all content */
         .centered {
             display: flex;
             justify-content: center;
@@ -98,26 +45,11 @@ st.markdown("""
             flex-direction: column;
             text-align: center;
         }
-
-        /* Contact section logo visibility fix */
-        p img {
-            background-color: #007bff;
-            border-radius: 50%;
-            padding: 5px;
-            margin: 0 10px;
-        }
-
     </style>
 """, unsafe_allow_html=True)
 
-# Inject moving shapes
-st.markdown("""
-    <div class="floating-shape floating-shape-1"></div>
-    <div class="floating-shape floating-shape-2"></div>
-    <div class="floating-shape floating-shape-3"></div>
-    <div class="floating-shape floating-shape-4"></div>
-    <div class="floating-shape floating-shape-5"></div>
-""", unsafe_allow_html=True)
+# Display the logo using Streamlit's st.image method
+st.image('logo.png', width=120)
 
 # Sidebar Navigation
 st.sidebar.title("Navigation")
@@ -148,23 +80,18 @@ if page == "Upload Image":
     st.subheader("Upload Retinal Image:")
     uploaded_file = st.file_uploader("Choose a retinal image...", type=["jpg", "png"])
 
-    # Side-by-side layout for image and prediction
     if uploaded_file is not None:
         img = Image.open(uploaded_file)
         img = img.resize((224, 224))  # Resize to match model input
         img_array = np.array(img) / 255.0  # Normalize pixel values
         img_array = img_array.reshape(1, -1)  # Reshape for model input
 
-        # Show the uploaded image in one column, and the predict button in another
+        # Side-by-side layout for image and prediction
         col1, col2 = st.columns([1, 1])
 
         with col1:
             # Display the uploaded image
-            st.markdown(f"""
-                <div class="centered">
-                    <img src='data:image/png;base64,{base64.b64encode(uploaded_file.getvalue()).decode()}' width='300' height='300'/>
-                </div>
-            """, unsafe_allow_html=True)
+            st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
 
         with col2:
             # Predict button
