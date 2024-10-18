@@ -3,6 +3,7 @@ import pickle
 from PIL import Image
 import numpy as np
 import base64
+import random
 
 # Load the trained model
 with open('diabetic_retinopathy_model.pkl', 'rb') as f:
@@ -25,6 +26,7 @@ st.markdown("""
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f0f4fa !important;
+            text-align: center;
         }
         
         /* Button Styles */
@@ -43,8 +45,8 @@ st.markdown("""
         
         /* Welcome message typing effect */
         .typing-demo {
-            width: 22ch;
-            animation: typing 2s steps(22), blink 0.5s step-end infinite alternate;
+            width: 40ch;  /* Adjusted width for full sentence */
+            animation: typing 3s steps(40), blink 0.5s step-end infinite alternate;
             white-space: nowrap;
             overflow: hidden;
             border-right: 3px solid;
@@ -57,7 +59,7 @@ st.markdown("""
         
         @keyframes typing {
             from { width: 0 }
-            to { width: 22ch }
+            to { width: 40ch }
         }
         
         @keyframes blink {
@@ -66,9 +68,9 @@ st.markdown("""
 
         /* Moving Shapes */
         @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-            100% { transform: translateY(0px) rotate(360deg); }
+            0% { transform: translate(0, 0); }
+            50% { transform(translate(50px, -50px)); }
+            100% { transform: translate(0, 0); }
         }
         
         .floating-shape {
@@ -77,31 +79,32 @@ st.markdown("""
             height: 80px;
             background-color: rgba(0, 123, 255, 0.3);
             border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
+            animation: float 10s infinite ease-in-out;
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
+
+        /* Random directions for shapes */
+        .floating-shape-1 { top: 100px; left: 50px; animation-duration: 12s; animation-delay: 0s; }
+        .floating-shape-2 { top: 200px; right: 100px; animation-duration: 8s; animation-delay: 1s; }
+        .floating-shape-3 { bottom: 150px; left: 30px; animation-duration: 10s; animation-delay: 2s; }
+        .floating-shape-4 { top: 300px; right: 200px; animation-duration: 15s; animation-delay: 1.5s; }
+        .floating-shape-5 { bottom: 50px; right: 80px; animation-duration: 20s; animation-delay: 0.5s; }
         
-        .floating-shape-1 {
-            top: 100px;
-            left: 50px;
+        /* Central alignment */
+        .centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
         }
 
-        .floating-shape-2 {
-            top: 200px;
-            right: 100px;
-        }
-        
         /* Contact section logo visibility fix */
         p img {
             background-color: #007bff;
             border-radius: 50%;
             padding: 5px;
             margin: 0 10px;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #003366;
         }
 
     </style>
@@ -111,67 +114,92 @@ st.markdown("""
 st.markdown("""
     <div class="floating-shape floating-shape-1"></div>
     <div class="floating-shape floating-shape-2"></div>
+    <div class="floating-shape floating-shape-3"></div>
+    <div class="floating-shape floating-shape-4"></div>
+    <div class="floating-shape floating-shape-5"></div>
 """, unsafe_allow_html=True)
 
-# Typing welcome message
-st.markdown("""
-    <div class="typing-demo">
-        Welcome to Diabetic Retinopathy Detection
-    </div>
-""", unsafe_allow_html=True)
+# Sidebar Navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", ["Home", "About", "Upload Image", "Contact"])
 
-# Display logo at the top
-logo_base64 = get_base64_image('logo.png')
-st.markdown(f"""
-    <div style='text-align: center;'>
-        <img src='data:image/png;base64,{logo_base64}' width='100' height='100'/>
-    </div>
-""", unsafe_allow_html=True)
+# Welcome message with typing effect
+if page == "Home":
+    st.markdown("""
+        <div class="typing-demo">
+            Welcome to Diabetic Retinopathy Detection
+        </div>
+    """, unsafe_allow_html=True)
 
-# App title
-st.title('Diabetic Retinopathy Detection')
+# About section
+if page == "About":
+    st.title("About This Application")
+    st.write("""
+        This application is designed to assist in the detection of Diabetic Retinopathy from retinal images. 
+        Using machine learning, the system analyzes uploaded images and predicts whether diabetic retinopathy is present. 
+        Diabetic retinopathy is a serious condition caused by damage to the blood vessels in the retina due to high blood sugar levels, which can lead to vision loss if left untreated.
+    """)
 
-# Image input section
-st.subheader("Upload Retinal Image:")
-uploaded_file = st.file_uploader("Choose a retinal image...", type=["jpg", "png"])
+# Upload Image Section
+if page == "Upload Image":
+    st.title("Diabetic Retinopathy Detection")
+    
+    # Image input section
+    st.subheader("Upload Retinal Image:")
+    uploaded_file = st.file_uploader("Choose a retinal image...", type=["jpg", "png"])
 
-# Side-by-side layout for image and prediction
-if uploaded_file is not None:
-    img = Image.open(uploaded_file)
-    img = img.resize((224, 224))  # Resize to match model input
-    img_array = np.array(img) / 255.0  # Normalize pixel values
-    img_array = img_array.reshape(1, -1)  # Reshape for model input
+    # Side-by-side layout for image and prediction
+    if uploaded_file is not None:
+        img = Image.open(uploaded_file)
+        img = img.resize((224, 224))  # Resize to match model input
+        img_array = np.array(img) / 255.0  # Normalize pixel values
+        img_array = img_array.reshape(1, -1)  # Reshape for model input
 
-    # Show the uploaded image in one column, and the predict button in another
-    col1, col2 = st.columns([1, 1])
+        # Show the uploaded image in one column, and the predict button in another
+        col1, col2 = st.columns([1, 1])
 
-    with col1:
-        # Display the uploaded image
-        st.markdown(f"""
-            <div style='text-align: center;'>
-                <img src='data:image/png;base64,{base64.b64encode(uploaded_file.getvalue()).decode()}' width='300' height='300'/>
-            </div>
-        """, unsafe_allow_html=True)
+        with col1:
+            # Display the uploaded image
+            st.markdown(f"""
+                <div class="centered">
+                    <img src='data:image/png;base64,{base64.b64encode(uploaded_file.getvalue()).decode()}' width='300' height='300'/>
+                </div>
+            """, unsafe_allow_html=True)
 
-    with col2:
-        # Predict button
-        if st.button('Predict'):
-            prediction = model.predict(img_array)
-            st.write(f'**Prediction:** {"Diabetic Retinopathy Detected" if prediction[0] != 0 else "No Diabetic Retinopathy"}')
+        with col2:
+            # Predict button
+            if st.button('Predict'):
+                prediction = model.predict(img_array)
+                st.write(f'**Prediction:** {"Diabetic Retinopathy Detected" if prediction[0] != 0 else "No Diabetic Retinopathy"}')
+                
+                # Display advice based on prediction
+                if prediction[0] != 0:
+                    st.write("""
+                        ### Medical Advice:
+                        - Consult an ophthalmologist immediately.
+                        - Control your blood sugar levels to prevent further damage.
+                        - Regular eye exams are recommended for early detection and treatment.
+                    """)
+                else:
+                    st.write("""
+                        ### Medical Advice:
+                        - Your retinal image shows no signs of diabetic retinopathy.
+                        - Maintain a healthy lifestyle and have regular eye check-ups.
+                    """)
 
-# Contact section with social media icons
-st.markdown("""
-    <hr>
-    <h3>Contact Me</h3>
-    <p>
-        <a href="https://github.com/Heet852003" target="_blank">
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" width="30" height="30">
-        </a>
-        <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank">
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" width="30" height="30">
-        </a>
-        <a href="mailto:mehtaheet5@gmail.com">
-            <img src="https://img.icons8.com/?size=100&id=12623&format=png&color=FFFFFF" width="30" height="30">
-        </a>
-    </p>
-""", unsafe_allow_html=True)
+# Contact section
+if page == "Contact":
+    st.title("Contact Me")
+    st.markdown("""
+        <p>
+            <a href="https://github.com/Heet852003" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" width="30" height="30">
+            </a>
+            <a href="https://www.linkedin.com/in/heet-mehta-41b862225" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" width="30" height="30">
+            </a>
+            <a href="mailto:mehtaheet5@gmail.com">
+                <img src="https://img.icons8.com/?size=100&id=12623&format=png&color=FFFFFF" width="30" height="30">
+            </a>
+        </p>
+    """, unsafe_allow_html=True)
