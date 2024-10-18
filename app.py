@@ -77,11 +77,59 @@ st.markdown("""
             margin: 0 10px;
         }
 
-        /* Central alignment for all headers */
-        h1, h2, h3 {
-            text-align: center;
+        /* Sidebar styling */
+        .css-1d391kg {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
         }
+
+        .css-1d391kg .css-1vbd788 {
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        .css-1vbd788:hover {
+            background-color: #0056b3;
+            transition: 0.3s;
+        }
+
+        /* Moving Shapes */
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -30px); }
+            100% { transform: translate(0, 0); }
+        }
+        
+        .floating-shape {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 123, 255, 0.3);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Random directions for shapes */
+        .floating-shape-1 { top: 100px; left: 50px; animation-duration: 12s; animation-delay: 0s; }
+        .floating-shape-2 { top: 200px; right: 100px; animation-duration: 8s; animation-delay: 1s; }
+        .floating-shape-3 { bottom: 150px; left: 30px; animation-duration: 10s; animation-delay: 2s; }
+        .floating-shape-4 { top: 300px; right: 200px; animation-duration: 15s; animation-delay: 1.5s; }
+        .floating-shape-5 { bottom: 50px; right: 80px; animation-duration: 20s; animation-delay: 0.5s; }
+
     </style>
+""", unsafe_allow_html=True)
+
+# Inject moving shapes
+st.markdown("""
+    <div class="floating-shape floating-shape-1"></div>
+    <div class="floating-shape floating-shape-2"></div>
+    <div class="floating-shape floating-shape-3"></div>
+    <div class="floating-shape floating-shape-4"></div>
+    <div class="floating-shape floating-shape-5"></div>
 """, unsafe_allow_html=True)
 
 # Display the logo using Streamlit's st.image method
