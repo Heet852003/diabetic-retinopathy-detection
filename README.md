@@ -1,126 +1,61 @@
-# 👁️ **Diabetic Retinopathy Detection**
-### 🔍 **AI-Based Early Diagnosis System for Retinal Health Monitoring**
+<p align="center">
+  <img src="logo.png" width="90" alt="logo" />
+</p>
 
-![Python](https://img.shields.io/badge/Python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=tensorflow&logoColor=white)
-![Deep Learning](https://img.shields.io/badge/Deep%20Learning-%23E34F26.svg?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Completed-green?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+<h1 align="center">Diabetic Retinopathy Detection</h1>
+<p align="center"><b>A Streamlit app that screens retinal fundus images for diabetic retinopathy using a scikit-learn classifier.</b></p>
 
----
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.8+-3776AB?logo=python&logoColor=white">
+  <img alt="scikit-learn" src="https://img.shields.io/badge/model-scikit--learn-F7931E?logo=scikitlearn&logoColor=white">
+  <img alt="Streamlit" src="https://img.shields.io/badge/app-Streamlit-FF4B4B?logo=streamlit&logoColor=white">
+</p>
 
-## 📄 **Overview**
+Diabetic retinopathy is retinal damage caused by high blood sugar, and it's
+a leading cause of preventable blindness if caught late. This app takes a
+retinal fundus photo, runs it through a trained classifier, and flags
+whether it shows signs of diabetic retinopathy, along with basic
+follow-up guidance.
 
-The **Diabetic Retinopathy Detection** project is an AI-powered solution aimed at facilitating early diagnosis of diabetic retinopathy through image-based analysis. Leveraging the power of **Convolutional Neural Networks (CNN)** and **Deep Learning** frameworks, the system analyzes retinal images to detect various stages of diabetic retinopathy, thus aiding in timely intervention and treatment.
+## How it works
 
-This project uses a comprehensive dataset of retinal fundus images and implements a multi-layered CNN architecture to achieve high accuracy in identifying symptoms such as microaneurysms, hemorrhages, and exudates. The model is hosted on a web interface, enabling healthcare professionals to upload retinal images and receive instant diagnostic results.
+1. Upload a retinal image (`jpg`/`png`) in the Streamlit UI.
+2. The image is resized to 224x224 and normalized.
+3. `diabetic_retinopathy_model.pkl`, a scikit-learn classifier trained on
+   labeled retinal images, predicts a diagnosis.
+4. The app shows a detected / not-detected result with basic medical
+   guidance for either case.
 
----
+The training labels (`labels.csv`) use the standard 5-class DR severity
+scale (No DR, Mild, Moderate, Severe, Proliferative DR); the current UI
+collapses that to a binary detected/not-detected result.
 
-## ✨ **Key Features**
+**Note:** the training script that produced the `.pkl` isn't included in
+this repo, only the trained model artifact and `app.py` for inference.
+The dataset used follows the same class layout as Kaggle's
+[APTOS 2019 Blindness Detection](https://www.kaggle.com/c/aptos2019-blindness-detection)
+dataset; the raw images aren't checked into this repo to keep it a
+reasonable size to clone, `labels.csv` alone documents the label
+distribution.
 
-- **🔹 Automated Diagnosis**  
-  Automatically classifies retinal images into different stages of diabetic retinopathy, minimizing the need for manual examination.
+## Running it
 
-- **🔹 CNN-Based Model**  
-  A well-trained Convolutional Neural Network with multiple layers for feature extraction and classification.
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-- **🔹 Web-Based Interface**  
-  A user-friendly web interface where users can upload images, view results, and understand the diagnostic confidence levels.
+Then open http://localhost:8501.
 
-- **🔹 Interactive Visualizations**  
-  Generates heatmaps and overlay visualizations to highlight areas of concern in the retinal images.
+## Repository layout
 
-- **🔹 Cloud Hosting**  
-  Hosted on a cloud platform for remote access, with support for real-time data processing.
+```
+app.py                            Streamlit app: upload, predict, display result
+diabetic_retinopathy_model.pkl    trained scikit-learn classifier
+labels.csv                        training label reference (image id -> DR stage 0-4)
+logo.png                          app icon / header image
+```
 
----
+## License
 
-## 🛠️ **Tech Stack**
-
-- **Programming Language:**  
-  ![Python](https://img.shields.io/badge/Python-3.8-blue.svg?style=for-the-badge&logo=python&logoColor=white)  
-  Used for implementing the model and backend functionalities.
-
-- **Frameworks:**  
-  ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0-orange.svg?style=for-the-badge&logo=tensorflow&logoColor=white)  
-  The primary library for building and training the deep learning model.  
-
-  ![Keras](https://img.shields.io/badge/Keras-2.4.3-red.svg?style=for-the-badge&logo=keras&logoColor=white)  
-  Used for constructing the neural network layers and model management.
-
-- **Frontend & Hosting:**  
-  ![Streamlit](https://img.shields.io/badge/Streamlit-Cloud-red?style=for-the-badge&logo=streamlit)  
-  ![Heroku](https://img.shields.io/badge/Heroku-Deployed-blueviolet.svg?style=for-the-badge&logo=heroku)  
-  Streamlit is used for building the web interface, and the application is hosted on Heroku for easy access and scalability.
-
-- **Libraries Used:**  
-  - `NumPy`  
-  - `Pandas`  
-  - `OpenCV`  
-  - `Matplotlib`
-
----
-
-## 🚀 **Getting Started**
-
-### Prerequisites
-Before you begin, ensure you have the following installed on your local machine:
-- Python 3.8 or above
-- TensorFlow and Keras libraries
-- Streamlit for the web interface
-
-### Installation
-Follow the steps below to set up the project on your local environment:
-
-1. **Navigate to the Project Directory:**
-   ```bash
-   cd diabetic-retinopathy-detection
-2. **Install Dependencies: Install the necessary dependencies using the requirements.txt file**
-   ```bash
-   pip install -r requirements.txt
-   
-3. **Run the Application: Launch the Streamlit app locally.**
-   ```bash
-   streamlit run app.py
-
-4. **Access the Interface: Open your web browser and go to the following URL to interact with the application**
-   ```bash
-   http://localhost:8501
-
----
-
-
-## 📊 **Model Performance**
-The model achieves an accuracy of 85% on the validation dataset and a precision of 88%. The results are visualized using confusion matrices and ROC curves, providing a clear understanding of the model's classification performance. The model has been fine-tuned to minimize false negatives, ensuring reliable predictions and robust detection of diabetic retinopathy stages.
-
----
-
-
-## 📋 **Future Enhancements**
-
-- 🌟 **Implement Hybrid Models:**
-Integrate a hybrid model combining CNNs with RNNs to capture temporal dependencies for more comprehensive analysis.
-- 🌟 **Expand Diagnostic Scope:**
-Extend the model's capabilities to include detection of other retinal conditions such as glaucoma and macular degeneration.
-- 🌟 **Enhanced Web Interface:**
-Upgrade the web interface with more interactive diagnostic insights and patient management features, making it a one-stop solution for retinal health monitoring.
-
----
-
-
-## 🤝 **Contributing**
-Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or create a pull request. Let's collaborate to make this project even better!
-
----
-
-
-## 📬 **Contact**
-For any inquiries or suggestions, please feel free to reach out:
-
-- **Name: Heet Mehta**
-- **Email: mehtaheet5@gmail.com**
-- **GitHub: Heet852003**
-
-
-
+MIT. See [LICENSE](LICENSE) for details.
